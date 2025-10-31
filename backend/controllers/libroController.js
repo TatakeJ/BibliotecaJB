@@ -1,39 +1,33 @@
 const { pool } = require('../config/database');
 
 // Obtener todos los libros con información relacionada
-// exports.getAllLibros = async (req, res) => {
-//   try {
-//     const [rows] = await pool.query(`
-//       SELECT 
-//         l.*,
-//         c.nom_categ,
-//         g.nom_gen,
-//         a.nom_autor,
-//         a.nacionalidad,
-//         e.nom_edito
-//       FROM libro l
-//       LEFT JOIN categoria c ON l.id_categ = c.id_categ
-//       LEFT JOIN genero g ON l.id_gen = g.id_gen
-//       LEFT JOIN autor a ON l.id_autor = a.id_autor
-//       LEFT JOIN editorial e ON l.id_edito = e.id_edito
-//       ORDER BY l.id_libro DESC
-//     `);
-//     res.json({ success: true, data: rows });
-//   } catch (error) {
-//     res.status(500).json({ success: false, message: error.message });
-//   }
-// };
-
 exports.getAllLibros = async (req, res) => {
   try {
     const [rows] = await pool.query(`
-      SELECT * FROM libro ORDER BY id_libro DESC
+      SELECT l.*, c.nom_categ, g.nom_gen, a.nom_autor, a.nacionalidad,e.nom_edito
+      FROM libro l
+      LEFT JOIN categoria c ON l.id_categ = c.id_categ
+      LEFT JOIN genero g ON l.id_gen = g.id_gen
+      LEFT JOIN autor a ON l.id_autor = a.id_autor
+      LEFT JOIN editorial e ON l.id_edito = e.id_edito
+      ORDER BY l.id_libro DESC
     `);
     res.json({ success: true, data: rows });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+// exports.getAllLibros = async (req, res) => {
+//   try {
+//     const [rows] = await pool.query(`
+//       SELECT * FROM libro ORDER BY id_libro DESC
+//     `);
+//     res.json({ success: true, data: rows });
+//   } catch (error) {
+//     res.status(500).json({ success: false, message: error.message });
+//   }
+// };
 
 
 // Obtener un libro por ID
