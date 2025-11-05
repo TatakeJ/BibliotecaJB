@@ -3,16 +3,23 @@ import { useEffect, useState } from "react";
 import { getLibroById } from "../../api/librosApi";
 
 function LibrosId() {
-    const { id } = useParams(); // 👈 toma el ID desde la URL
+    const { id } = useParams();
     const [libro, setLibro] = useState(null);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         if (id) {
-        getLibroById(id).then(setLibro).catch(console.error);
+            getLibroById(id)
+                .then(setLibro)
+                .catch(error => {
+                    setError(error.message);
+                    setLibro(null);
+                });
         }
     }, [id]);
 
-    if (!libro) return <p>Cargando libro...</p>;
+    if (error) return <p>Error: {error}</p>;
+    if (!libro) return <p>Cargando...</p>;
 
     return (
         <div>

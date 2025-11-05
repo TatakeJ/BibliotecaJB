@@ -1,14 +1,16 @@
-import { useEffect, useState } from "react";
+import React from "react";
 import { getAllLibros } from "../../api/librosApi.js";
 
 function Libros() {
-  const [libros, setLibros] = useState([]);
+  const [libros, setLibros] = React.useState([]);
 
   var URL = "http://localhost:5173/libros/";
 
   // Al montar el componente, hacemos la petición al backend
-  useEffect(() => {
-    getAllLibros().then(setLibros).catch(console.error);
+  React.useEffect(() => {
+    getAllLibros()
+      .then(setLibros)
+      .catch(console.error);
   }, []);
 
   return (

@@ -7,7 +7,7 @@ function HomePage() {
         <p>Selecciona un módulo para gestionar:</p>
 
         <div style={{ marginTop: "20px" }}>
-            <Link to="/libros">
+            <Link to="/librosPage">
             <button style={{ margin: "10px", padding: "10px 20px" }}>📘 Libros</button>
             </Link>
 
