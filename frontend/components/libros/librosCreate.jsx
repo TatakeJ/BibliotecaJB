@@ -1,12 +1,11 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { createLibro } from "../../api/librosApi.js";
 import { getAllCategorias } from "../../api/catalogoApi.js";
 import { getAllGeneros } from "../../api/catalogoApi.js";
 import { getAllAutores } from "../../api/catalogoApi.js";
 import { getAllEditoriales } from "../../api/catalogoApi.js";
 
 function LibrosCreate() {
-    const navigate = useNavigate();
 
     const [categorias, setCategorias] = React.useState([]);
     const [generos, setGeneros] = React.useState([]);
@@ -53,27 +52,7 @@ function LibrosCreate() {
             return;
         }
 
-        try {
-            const res = await fetch("http://localhost:5000/api/libros/create", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(form)
-            });
-
-            const data = await res.json();
-
-            if (!res.ok) {
-                // muestra el mensaje devuelto por el backend si existe
-                alert(data.message || "Error al crear el libro.");
-                return;
-            }
-
-            alert("Libro creado correctamente (id: " + (data.id ?? "") + ")");
-            navigate("/libros");
-        } catch (err) {
-            console.error(err);
-            alert("Error de red al intentar crear el libro.");
-        }
+        createLibro(form);
     };
 
     return (
@@ -166,7 +145,6 @@ function LibrosCreate() {
                 <br />
 
                 <button type="submit">Guardar Libro</button>
-                <Link to="/libros"><button type="button">Volver</button></Link>
             </form>
         </div>
     )
