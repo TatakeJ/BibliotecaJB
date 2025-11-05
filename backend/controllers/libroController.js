@@ -10,25 +10,13 @@ exports.getAllLibros = async (req, res) => {
       LEFT JOIN genero g ON l.id_gen = g.id_gen
       LEFT JOIN autor a ON l.id_autor = a.id_autor
       LEFT JOIN editorial e ON l.id_edito = e.id_edito
-      ORDER BY l.id_libro DESC
+      ORDER BY l.id_libro ASC
     `);
     res.json({ success: true, data: rows });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
 };
-
-// exports.getAllLibros = async (req, res) => {
-//   try {
-//     const [rows] = await pool.query(`
-//       SELECT * FROM libro ORDER BY id_libro DESC
-//     `);
-//     res.json({ success: true, data: rows });
-//   } catch (error) {
-//     res.status(500).json({ success: false, message: error.message });
-//   }
-// };
-
 
 // Obtener un libro por ID
 exports.getLibroById = async (req, res) => {
