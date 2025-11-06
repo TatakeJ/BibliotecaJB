@@ -13,6 +13,8 @@ import Generos from "../components/catalogo/generos.jsx";
 import Editoriales from "../components/catalogo/editoriales.jsx";
 import PrestamoPage from "../pages/prestamoPage.jsx";
 import Prestamos from "../components/prestamos/prestamos.jsx";
+import UsuariosPage from "../pages/usuariosPage.jsx";
+import Usuarios from "../components/usuarios/usuarios.jsx";
 
 function App() {
   return (
@@ -39,6 +41,9 @@ function App() {
         //Rutas gestion de prestamos
         <Route path="/prestamosPage" element={<PrestamoPage />} />
         <Route path="/prestamos" element={<Prestamos />} />
+        /Rutas gestion de usuarios
+        <Route path="/usuariosPage" element={<UsuariosPage />} />
+        <Route path="/usuarios" element={<Usuarios />} />
       </Routes>
     </div>
   );

@@ -19,9 +19,9 @@ function HomePage() {
             <button style={{ margin: "10px", padding: "10px 20px" }}>📖 Préstamos</button>
             </Link>
 
-            {/* <Link to="/usuarios">
+            <Link to="/usuariosPage">
             <button style={{ margin: "10px", padding: "10px 20px" }}>👤 Usuarios</button>
-            </Link> */}
+            </Link>
         </div>
         </div>
     );
