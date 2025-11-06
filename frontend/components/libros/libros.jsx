@@ -1,5 +1,6 @@
 import React from "react";
 import { getAllLibros } from "../../api/librosApi.js";
+import '../../src/styles/libros/libros.css';
 
 function Libros() {
   const [libros, setLibros] = React.useState([]);
@@ -16,7 +17,7 @@ function Libros() {
   return (
     <div style={{ padding: "20px" }}>
       <h2>Lista de libros</h2>
-      <table border="1" cellPadding="8" style={{ borderCollapse: "collapse", width: "100%" }}>
+      <table className="table-libros table table-striped-columns">
         <thead style={{ background: "#eee" }}>
           <tr>
             <th>Detalle</th>

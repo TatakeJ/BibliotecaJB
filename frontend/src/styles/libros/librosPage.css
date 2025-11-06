@@ -1,0 +1,40 @@
+.cont-bienvenida{
+    margin-bottom: 50px;
+}
+
+.cont-opc-libro {
+    width: 50%;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    align-content: center;
+}
+
+.row{
+    display: flex;
+    align-content: center;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.row button{
+    width: 50%;
+    cursor: pointer;
+    margin: auto;
+}
+
+.row a{
+    width: 50%;
+    cursor: pointer;
+    margin: auto;
+}
+
+.int-libroId{
+    width: 50%;
+    margin: 10px;
+    padding: 10px 20px;
+}

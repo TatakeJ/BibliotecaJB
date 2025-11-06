@@ -45,6 +45,29 @@ export async function getAllAutores() {
     }
 }
 
+export async function createAutor(form) {
+    try {
+        const res = await fetch("http://localhost:5000/api/catalogo/autores", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(form)
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            // muestra el mensaje devuelto por el backend si existe
+            alert(data.message || "Error al crear el autor.");
+            return;
+        }
+
+        alert("Autor creado correctamente (id: " + (data.id ?? "") + ")");
+    } catch (err) {
+        console.error(err);
+        alert("Error de red al intentar crear el autor.");
+    }
+}
+
 export async function getAllEditoriales() {
     try {
         const res = await fetch("http://localhost:5000/api/catalogo/editoriales");

@@ -1,5 +1,3 @@
-import { Link, useNavigate } from "react-router-dom";
-
 export async function getAllLibros() {
     try {
         const res = await fetch("http://localhost:5000/api/libros");
@@ -31,8 +29,6 @@ export async function getLibroById(id) {
 }
 
 export async function createLibro(form) {
-    const navigate = useNavigate();
-
     try {
         const res = await fetch("http://localhost:5000/api/libros/create", {
             method: "POST",
@@ -49,7 +45,6 @@ export async function createLibro(form) {
         }
 
         alert("Libro creado correctamente (id: " + (data.id ?? "") + ")");
-        navigate("/libros");
     } catch (err) {
         console.error(err);
         alert("Error de red al intentar crear el libro.");

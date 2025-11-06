@@ -1,4 +1,6 @@
 import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import "../../src/styles/libros/librosCreate.css";
 import { createLibro } from "../../api/librosApi.js";
 import { getAllCategorias } from "../../api/catalogoApi.js";
 import { getAllGeneros } from "../../api/catalogoApi.js";
@@ -7,6 +9,7 @@ import { getAllEditoriales } from "../../api/catalogoApi.js";
 
 function LibrosCreate() {
 
+    const navigate = useNavigate();
     const [categorias, setCategorias] = React.useState([]);
     const [generos, setGeneros] = React.useState([]);
     const [autores, setAutores] = React.useState([]);
@@ -52,100 +55,121 @@ function LibrosCreate() {
             return;
         }
 
-        createLibro(form);
+        try {
+            await createLibro(form);
+            navigate("/libros");
+        } catch (error) {
+            setError(error.message);
+        }
     };
 
     return (
-        <div>
+        <div className="cont-create">
             <h1>Crear Nuevo Libro</h1>
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="nom_libro">Titulo:</label>
-                <input type="text" id="nom_libro" name="nom_libro" value={form.nom_libro} onChange={handleChange} required />
-                <br />
-
-                <label htmlFor="select-categoria">Categoria:</label>
-                <select name="id_categ" id="select-categoria" value={form.id_categ} onChange={handleChange}>
-                    <option value="">Seleccione una categoría</option>
-                    {categorias.map((categ) => (
-                        <option key={categ.id_categ} value={categ.id_categ}>
-                            {categ.nom_categ}
-                        </option>
-                    ))}
-                </select>
-                <br />
-
-                <label htmlFor="select-genero">Genero:</label>
-                <select name="id_gen" id="select-genero" value={form.id_gen} onChange={handleChange}>
-                    <option value="">Seleccione un genero</option>
-                    {generos.map((gen) => (
-                        <option key={gen.id_gen} value={gen.id_gen}>
-                            {gen.nom_gen}
-                        </option>
-                    ))}
-                </select>
-                <br />
-
-                <label htmlFor="cant_ejempla">Cantidad de ejemplares:</label>
-                <input type="number" id="cant_ejempla" name="cant_ejempla" value={form.cant_ejempla} onChange={handleChange} />
-                <br />
-
-                <fieldset>
-                    <legend>Disponibilidad:</legend>
-                    <div>
-                        <input type="radio" id="disponible" name="dispo_libro" value="Disponible" checked={form.dispo_libro === "Disponible"} onChange={handleChange}/>
-                        <label htmlFor="disponible">Disponible</label>
+            <div className="cont-form">
+                <form onSubmit={handleSubmit}>
+                    <div className="input-group input-group-sm mb-3">
+                        <span className="input-group-text" id="inputGroup-sizing-sm">Titulo:</span>
+                        <input type="text" className="form-control" id="nom_libro" name="nom_libro" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value={form.nom_libro} onChange={handleChange} required/>
                     </div>
-                    <div>
-                        <input type="radio" id="prestado" name="dispo_libro" value="Prestado" checked={form.dispo_libro === "Prestado"} onChange={handleChange}/>
-                        <label htmlFor="prestado">Prestado</label>
+
+                    <div className="input-group input-group-sm mb-3">
+                        <span className="input-group-text" id="inputGroup-sizing-sm">Categoria:</span>
+                        <select className="form-select" aria-label="Default select example" name="id_categ" id="select-categoria" value={form.id_categ} onChange={handleChange}>
+                            <option value="">Seleccione una categoría</option>
+                            {categorias.map((categ) => (
+                                <option key={categ.id_categ} value={categ.id_categ}>
+                                    {categ.nom_categ}
+                                </option>
+                            ))}
+                        </select>
                     </div>
-                </fieldset>
-                <br />
 
-                <label htmlFor="select-autor">Autor:</label>
-                <select name="id_autor" id="select-autor" value={form.id_autor} onChange={handleChange}>
-                    <option value="">Seleccione un autor</option>
-                    {autores.map((autor) => (
-                        <option key={autor.id_autor} value={autor.id_autor}>
-                            {autor.nom_autor}
-                        </option>
-                    ))}
-                </select>
-                <br />
+                    <div className="input-group input-group-sm mb-3">
+                        <span className="input-group-text" id="inputGroup-sizing-sm">Genero:</span>
+                        <select className="form-select" aria-label="Default select example" name="id_gen" id="select-genero" value={form.id_gen} onChange={handleChange}>
+                            <option value="">Seleccione una genero</option>
+                            {generos.map((gen) => (
+                                <option key={gen.id_gen} value={gen.id_gen}>
+                                    {gen.nom_gen}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
 
-                <label htmlFor="ano_libro">Año:</label>
-                <input type="date" id="ano_libro" name="año_libro" value={form["año_libro"]} onChange={handleChange} />
-                <br />
+                    <div className="input-group input-group-sm mb-3">
+                        <span className="input-group-text" id="inputGroup-sizing-sm">Cantidad de ejemplares:</span>
+                        <input type="number" className="form-control" id="cant_ejempla" name="cant_ejempla" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value={form.cant_ejempla} onChange={handleChange} required/>
+                    </div>
 
-                <label htmlFor="select-editorial">Editorial:</label>
-                <select name="id_edito" id="select-editorial" value={form.id_edito} onChange={handleChange}>
-                    <option value="">Seleccione una editorial</option>
-                    {editoriales.map((edito) => (
-                        <option key={edito.id_edito} value={edito.id_edito}>
-                            {edito.nom_edito}
-                        </option>
-                    ))}
-                </select>
-                <br />
+                    <fieldset>
+                        <legend>Disponibilidad:</legend>
+                        <div className="form-check">
+                            <input className="form-check-input" type="radio" id="disponible" name="dispo_libro" value="Disponible" checked={form.dispo_libro === "Disponible"} onChange={handleChange}/>
+                            <label className="form-check-label" htmlFor="disponible">
+                                Disponible
+                            </label>
+                        </div>
+                        <div className="form-check">
+                            <input className="form-check-input" type="radio" id="prestado" name="dispo_libro" value="Prestado" checked={form.dispo_libro === "Prestado"} onChange={handleChange}/>
+                            <label className="form-check-label" htmlFor="prestado">
+                                Prestado
+                            </label>
+                        </div>
+                    </fieldset>
 
-                <label htmlFor="edicion_libro">Edición:</label>
-                <input type="text" id="edicion_libro" name="edicion_libro" value={form.edicion_libro} onChange={handleChange} />
-                <br />
+                    <div className="input-group input-group-sm mb-3">
+                        <span className="input-group-text" id="inputGroup-sizing-sm">Autor:</span>
+                        <select className="form-select" aria-label="Default select example" name="id_autor" id="select-autor" value={form.id_autor} onChange={handleChange}>
+                            <option value="">Seleccione un autor</option>
+                            {autores.map((autor) => (
+                                <option key={autor.id_autor} value={autor.id_autor}>
+                                    {autor.nom_autor}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
 
-                <label htmlFor="isbn">ISBN:</label>
-                <input type="text" id="isbn" name="isbn" value={form.isbn} onChange={handleChange} />
-                <br />
+                    <div className="input-group input-group-sm mb-3">
+                        <span className="input-group-text" id="inputGroup-sizing-sm">Año:</span>
+                        <input type="date" className="form-control" id="ano_libro" name="año_libro" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value={form["año_libro"]} onChange={handleChange} required/>
+                    </div>
 
-                <label htmlFor="fecha_ingreso">Fecha de ingreso:</label>
-                <input type="date" id="fecha_ingreso" name="fecha_ingreso" value={form.fecha_ingreso} onChange={handleChange} />
-                <br />
+                    <div className="input-group input-group-sm mb-3">
+                        <span className="input-group-text" id="inputGroup-sizing-sm">Editorial:</span>
+                        <select className="form-select" aria-label="Default select example" name="id_edito" id="select-editorial" value={form.id_edito} onChange={handleChange}>
+                            <option value="">Seleccione una editorial</option>
+                            {editoriales.map((edito) => (
+                                <option key={edito.id_edito} value={edito.id_edito}>
+                                    {edito.nom_edito}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
 
-                <label htmlFor="idioma">Idioma:</label>
-                <input type="text" id="idioma" name="idioma" value={form.idioma} onChange={handleChange} />
-                <br />
+                    <div className="input-group input-group-sm mb-3">
+                        <span className="input-group-text" id="inputGroup-sizing-sm">Edición:</span>
+                        <input type="text" className="form-control" id="edicion_libro" name="edicion_libro" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value={form.edicion_libro} onChange={handleChange} required/>
+                    </div>
 
-                <button type="submit">Guardar Libro</button>
-            </form>
+                    <div className="input-group input-group-sm mb-3">
+                        <span className="input-group-text" id="inputGroup-sizing-sm">ISBN:</span>
+                        <input type="text" className="form-control" id="isbn" name="isbn" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value={form.isbn} onChange={handleChange} required/>
+                    </div>
+
+                    <div className="input-group input-group-sm mb-3">
+                        <span className="input-group-text" id="inputGroup-sizing-sm">Fecha de ingreso:</span>
+                        <input type="date" className="form-control" id="fecha_ingreso" name="fecha_ingreso" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value={form.fecha_ingreso} onChange={handleChange} required/>
+                    </div>
+
+                    <div className="input-group input-group-sm mb-3">
+                        <span className="input-group-text" id="inputGroup-sizing-sm">Idioma:</span>
+                        <input type="text" className="form-control" id="idioma" name="idioma" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value={form.idioma} onChange={handleChange} required/>
+                    </div>
+
+                    <button type="submit">Guardar Libro</button>
+                </form>
+            </div>
         </div>
     )
 }

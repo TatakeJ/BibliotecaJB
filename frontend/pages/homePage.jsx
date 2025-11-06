@@ -11,11 +11,11 @@ function HomePage() {
             <button style={{ margin: "10px", padding: "10px 20px" }}>📘 Libros</button>
             </Link>
 
-            {/* <Link to="/catalogo">
+            <Link to="/catalogo">
             <button style={{ margin: "10px", padding: "10px 20px" }}>📗 Catálogo</button>
             </Link>
 
-            <Link to="/prestamos">
+            {/* <Link to="/prestamos">
             <button style={{ margin: "10px", padding: "10px 20px" }}>📖 Préstamos</button>
             </Link>
 
