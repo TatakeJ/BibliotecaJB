@@ -1,10 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getLibroById, updateLibro } from "../../api/librosApi";
-import { getAllCategorias } from "../../api/catalogoApi.js";
-import { getAllGeneros } from "../../api/catalogoApi.js";
-import { getAllAutores } from "../../api/catalogoApi.js";
-import { getAllEditoriales } from "../../api/catalogoApi.js";
+import { getLibroById, updateLibro, deleteLibro } from "../../api/librosApi";
+import { getAllCategorias, getAllGeneros, getAllAutores, getAllEditoriales } from "../../api/catalogoApi.js";
 
 function LibrosId() {
     const { id } = useParams();
@@ -30,7 +27,7 @@ function LibrosId() {
                     };
                     setLibro(data);
                     setFormData(formattedData);
-+                   setOriginalData(formattedData);
+                    setOriginalData(formattedData);
                 })
                 .catch(error => {
                     setError(error.message);
@@ -63,7 +60,7 @@ function LibrosId() {
         }));
     };
 
-    const handleSubmit = async (e) => {
+    const handleUpdate = async (e) => {
         e.preventDefault();
         if (originalData) {
             const fields = [
@@ -98,6 +95,20 @@ function LibrosId() {
         }
     };
 
+    const handleDelete = async () => {
+        const ok = window.confirm("¿Seguro que desea eliminar este libro? Esta acción no se puede deshacer.");
+        if (!ok) return;
+
+        try {
+            await deleteLibro(id);
+            alert("Libro eliminado correctamente.");
+            navigate("/libros");
+        } catch (err) {
+            console.error(err);
+            setError(err.message || "Error al eliminar el libro.");
+        }
+    };
+
     if (error) return <p>Error: {error}</p>;
     if (!libro) return <p>Cargando...</p>;
 
@@ -115,12 +126,12 @@ function LibrosId() {
                 <button onClick={() => document.getElementById("form-actualizar").style.display = "block"}>
                     Editar
                 </button>
-                <button>Eliminar</button>
+                <button onClick={handleDelete}>Eliminar</button>
             </div>
 
             <div id="form-actualizar" style={{display: "none"}}>
                 <h3>Actualizar Libro</h3>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleUpdate}>
                     <div>
                         <label htmlFor="nom_libro">Título:</label>
                         <input 

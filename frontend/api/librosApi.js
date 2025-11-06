@@ -90,3 +90,22 @@ export async function updateLibro(id, form) {
         throw new Error('No se pudo actualizar el libro: ' + error.message);
     }
 }
+
+export async function deleteLibro(id) {
+    try {
+        const res = await fetch(`http://localhost:5000/api/libros/${id}`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" }
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            throw new Error(data.message || 'Error al eliminar el libro');
+        }
+
+        return data;
+    } catch (error) {
+        throw new Error('No se pudo eliminar el libro: ' + error.message);
+    }
+}
