@@ -15,11 +15,11 @@ function HomePage() {
             <button style={{ margin: "10px", padding: "10px 20px" }}>📗 Catálogo</button>
             </Link>
 
-            {/* <Link to="/prestamos">
+            <Link to="/prestamosPage">
             <button style={{ margin: "10px", padding: "10px 20px" }}>📖 Préstamos</button>
             </Link>
 
-            <Link to="/usuarios">
+            {/* <Link to="/usuarios">
             <button style={{ margin: "10px", padding: "10px 20px" }}>👤 Usuarios</button>
             </Link> */}
         </div>

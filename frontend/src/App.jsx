@@ -11,6 +11,8 @@ import AutoresCreate from "../components/catalogo/autoresCreate.jsx";
 import Categorias from "../components/catalogo/categorias.jsx";
 import Generos from "../components/catalogo/generos.jsx";
 import Editoriales from "../components/catalogo/editoriales.jsx";
+import PrestamoPage from "../pages/prestamoPage.jsx";
+import Prestamos from "../components/prestamos/prestamos.jsx";
 
 function App() {
   return (
@@ -34,6 +36,9 @@ function App() {
         <Route path="/categorias" element={<Categorias />} />
         <Route path="/generos" element={<Generos />} />
         <Route path="/editoriales" element={<Editoriales />} />
+        //Rutas gestion de prestamos
+        <Route path="/prestamosPage" element={<PrestamoPage />} />
+        <Route path="/prestamos" element={<Prestamos />} />
       </Routes>
     </div>
   );
