@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import ModuleNav from "../components/common/ModuleNav";
 
 function HomePage() {
     return (
@@ -6,23 +6,7 @@ function HomePage() {
         <h1>📚 Bienvenido al Sistema de Biblioteca</h1>
         <p>Selecciona un módulo para gestionar:</p>
 
-        <div style={{ marginTop: "20px" }}>
-            <Link to="/librosPage">
-            <button style={{ margin: "10px", padding: "10px 20px" }}>📘 Libros</button>
-            </Link>
-
-            <Link to="/catalogo">
-            <button style={{ margin: "10px", padding: "10px 20px" }}>📗 Catálogo</button>
-            </Link>
-
-            <Link to="/prestamosPage">
-            <button style={{ margin: "10px", padding: "10px 20px" }}>📖 Préstamos</button>
-            </Link>
-
-            <Link to="/usuariosPage">
-            <button style={{ margin: "10px", padding: "10px 20px" }}>👤 Usuarios</button>
-            </Link>
-        </div>
+        <ModuleNav />
         </div>
     );
 }

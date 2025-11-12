@@ -13,13 +13,6 @@ function AutoresCreate() {
         nacionalidad: "",
     });
 
-    // React.useEffect(() => {
-    //     getAllCategorias().then(setCategorias).catch(console.error);
-    //     getAllGeneros().then(setGeneros).catch(console.error);
-    //     getAllAutores().then(setAutores).catch(console.error);
-    //     getAllEditoriales().then(setEditoriales).catch(console.error);
-    // }, []);
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         setForm(prev => ({ ...prev, [name]: value }));
