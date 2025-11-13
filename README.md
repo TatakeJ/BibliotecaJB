@@ -12,6 +12,7 @@ Backend para sistema de gestión de biblioteca desarrollado con Node.js, Express
 - **cors** - Habilitar CORS para el frontend
 - **bcryptjs** - Encriptación de contraseñas
 - **jsonwebtoken** - Autenticación JWT
+- **Bootstrap**- Diseño
 
 ## Requisitos Previos
 
@@ -19,8 +20,16 @@ Backend para sistema de gestión de biblioteca desarrollado con Node.js, Express
 2. **MySQL** instalado y corriendo
 3. **Git** para control de versiones
 
+## Recomendaciones
+- Ejecutar el comando npm install para el backend y el frontend para instalar las dependescias
+- Cambiar las credenciales de acceso para la base de datos en .env
+- El back y el front se ejecutan cada uno en una terminal independiente, accediendo a la carpeta correspondiente
+- Ejecutar el backend con el servicio MySQL iniciado y con el comando node index.js
+- Ejecutar el frontend con el comando npm run dev
+
 ## autores
------
+Nicolas Rodriguez
+Joseph Barreto
 
 ## React 
 Taskkill
