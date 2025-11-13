@@ -1,6 +1,5 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "../../src/styles/libros/librosCreate.css";
 import { createUsuario } from "../../api/usuariosApi.js";
 import { getAllTiposDocumento, getAllRoles } from "../../api/catalogoApi.js";
 
@@ -65,7 +64,7 @@ function UsuariosCreate() {
     return (
         <div className="cont-create">
             <h1>Crear Nuevo Usuario</h1>
-            <div className="cont-form">
+            <div className="container">
                 <form onSubmit={handleSubmit}>
                     <div className="input-group input-group-sm mb-3">
                         <span className="input-group-text" id="inputGroup-sizing-sm">Nombre:</span>
@@ -118,10 +117,7 @@ function UsuariosCreate() {
 
                     {error && <p style={{ color: "red" }}>{error}</p>}
 
-                    <button type="submit">Guardar Usuario</button>
-                    <Link to="/usuarios">
-                        <button type="button" style={{ marginLeft: "8px" }}>Cancelar</button>
-                    </Link>
+                    <button type="submit" class="btn btn-success">Guardar Usuario</button>
                 </form>
             </div>
         </div>

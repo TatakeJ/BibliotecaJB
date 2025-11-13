@@ -1,25 +1,33 @@
 import React from "react";
+import { FiBook } from "react-icons/fi";
+import { GrCatalog } from "react-icons/gr";
+import { CiViewList, CiUser } from "react-icons/ci";
 import { Link } from "react-router-dom";
 
 export default function ModuleNav({ items }) {
   const defaultItems = [
-    { to: "/libros", label: "Libros", emoji: "📘" },
-    { to: "/catalogo", label: "Catálogo", emoji: "📗" },
-    { to: "/prestamos", label: "Préstamos", emoji: "📖" },
-    { to: "/usuarios", label: "Usuarios", emoji: "👤" }
+    { to: "/usuarios", label: "Usuarios", emoji: <CiUser /> },
+    { to: "/prestamos", label: "Préstamos", emoji: <CiViewList /> },
+    { to: "/libros", label: "Libros", emoji: <FiBook /> },
+    { to: "/categorias", label: "Categorías", emoji: <GrCatalog /> },
+    { to: "/generos", label: "Géneros", emoji: <CiViewList /> },
+    { to: "/autores", label: "Autores", emoji: <FiBook /> },
+    { to: "/editoriales", label: "Editoriales", emoji: <CiUser /> }
   ];
 
   const list = items ?? defaultItems;
 
   return (
-    <div style={{ marginTop: 20 }}>
+    <>
       {list.map((it) => (
-        <Link key={it.to} to={it.to}>
-          <button style={{ margin: "10px", padding: "10px 20px" }}>
-            {it.emoji} {it.label}
-          </button>
-        </Link>
+          <div className="col">
+            <Link key={it.to} to={it.to}>
+              <button type="button" className="btn btn-outline-secondary w-100 h-100">
+                {it.emoji} {it.label}
+              </button>
+            </Link>
+          </div>
       ))}
-    </div>
+    </>
   );
 }

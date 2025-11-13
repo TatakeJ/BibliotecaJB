@@ -100,8 +100,11 @@ function UsuariosId() {
 
     return (
         <>
-            <div className="detalle-usuario">
+        <div class="card w-50 mx-auto my-4 text-center">
+            <div class="card-header">
                 <h2>Detalle del usuario {id}</h2>
+            </div>
+            <div class="card-body">
                 <p><b>Nombre:</b> {usuario.nom_usu}</p>
                 <p><b>Apellido:</b> {usuario.apell_usu}</p>
                 <p><b>Email:</b> {usuario.correo_usu}</p>
@@ -110,16 +113,18 @@ function UsuariosId() {
                 <p><b>Dirección:</b> {usuario.dircc_usu}</p>
                 <p><b>Rol:</b> {usuario.tipo_rol}</p>
             </div>
-            
-            <div>
+            <div class="card-footer">
                 <button onClick={() => document.getElementById("form-actualizar").style.display = "block"}>
                     Editar
                 </button>
                 <button onClick={handleDelete}>Eliminar</button>
             </div>
-
-            <div id="form-actualizar" style={{display: "none"}}>
+        </div>
+        <div class="card w-50 mx-auto my-4 text-center" id="form-actualizar" style={{display: "none"}}>
+            <div class="card-header">
                 <h3>Actualizar Usuario</h3>
+            </div>
+            <div class="card-body">
                 <form onSubmit={handleUpdate}>
                     <div>
                         <label htmlFor="nom_usu">Nombre:</label>
@@ -206,6 +211,7 @@ function UsuariosId() {
                     </button>
                 </form>
             </div>
+        </div>
         </>
     );
 }

@@ -1,6 +1,5 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "../../src/styles/libros/librosCreate.css";
 import { createCategoria } from "../../api/catalogoApi.js"; 
 
 
@@ -37,14 +36,14 @@ function CategoriasCreate() {
     return (
         <div className="cont-create">
             <h1>Crear Nueva Categoria</h1>
-            <div className="cont-form">
+            <div className="container">
                 <form onSubmit={handleSubmit}>
                     <div className="input-group input-group-sm mb-3">
                         <span className="input-group-text" id="inputGroup-sizing-sm">Nombre:</span>
                         <input type="text" className="form-control" id="nom_categ" name="nom_categ" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value={form.nom_categ} onChange={handleChange} required/>
                     </div>
 
-                    <button type="submit">Guardar Categoría</button>
+                    <button type="submit" class="btn btn-success">Guardar Categoría</button>
                 </form>
             </div>
         </div>

@@ -1,8 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { getAllPrestamos, devolverLibro } from "../../api/prestamosApi.js"; 
+import { getAllPrestamos, devolverLibro } from "../../api/prestamosApi.js";
+import { BsArrowBarLeft, BsArrowBarRight } from "react-icons/bs";
+import { FaSearch } from "react-icons/fa";
 import ModuleNav from "../common/ModuleNav.jsx";
-import '../../src/styles/libros/libros.css';
 
 function Prestamos() {
     const [prestamos, setPrestamos] = React.useState([]);
@@ -98,29 +99,26 @@ function Prestamos() {
 
     return (
         <div style={{ padding: "20px" }}>
-            <ModuleNav />
-            <h2>Lista de Prestamos</h2>
-            <div className="container text-center">
-                <div className="row">
-                    <div className="col">
-                        <Link to="/createPrestamo">
-                            <button style={{ margin: "10px", padding: "10px 20px" }}>Crear prestamo</button>
-                        </Link>
-                    </div>
+            <div style={{marginBottom: "20px"}} class="container text-center">
+                <div class="row">
+                    <ModuleNav />
                 </div>
             </div>
-
-            <div className="filter">
-                <input
-                    type="text"
-                    id="ipt-filter"
-                    placeholder="Buscar préstamo"
-                    value={query}
+            <h2 style={{textAlign: "center", marginBottom: "20px"}}>Lista de Prestamos</h2>
+            <div style={{display: "flex", justifyContent: "center", alignItems: "center", marginBottom: "20px",padding: "10px"}}>
+                <div className="input-group w-25">
+                    <span className="input-group-text" id="basic-addon1"><FaSearch /></span>
+                    <input type="text" id="ipt-filter" className="form-control" placeholder="Buscar prestamo" aria-label="Buscar prestamo" aria-describedby="basic-addon1" value={query}
                     onChange={(e) => {
                         setQuery(e.target.value);
-                        setCurrentPage(1);
-                    }}
-                />
+                        setCurrentPage(1); // volver a la primera página cuando cambia la búsqueda
+                    }}/>
+                </div>
+                <div className="container">
+                    <Link to="/createPrestamo">
+                        <button type="button" class="btn btn-outline-primary">Crear prestamo</button>
+                    </Link>
+                </div>
             </div>
 
             <table className="table-libros table table-striped-columns" border="1" cellPadding="10" style={{ width: "100%", borderCollapse: "collapse" }}>
@@ -159,6 +157,8 @@ function Prestamos() {
                                 <td>{prest.nom_autor}</td>
                                 <td style={{ display: "flex", gap: "5px" }}>
                                     <button
+                                        type="button" 
+                                        className="btn btn-outline-info"
                                         onClick={() => handleDevolver(prest)}
                                         disabled={!!prest.fecha_entrega_final}
                                         style={{ padding: "5px 10px" }}
@@ -166,7 +166,7 @@ function Prestamos() {
                                         Devolver
                                     </button>
                                     <Link to={`/prestamos/${prest.id_prest}`}>
-                                        <button style={{ padding: "5px 10px" }}>Ver</button>
+                                        <button type="button" className="btn btn-outline-success">Ver</button>
                                     </Link>
                                 </td>
                             </tr>
@@ -176,44 +176,42 @@ function Prestamos() {
             </table>
 
             {/* Controles de paginación */}
-            <div style={{ marginTop: "20px", textAlign: "center" }}>
+            <div style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center"}}>
+                <div class="btn-group" role="group" aria-label="Basic example">
                 <button
+                    type="button"
+                    className="btn btn-primary"
                     onClick={goToPreviousPage}
                     disabled={currentPage === 1}
                     style={{ marginRight: "10px", padding: "8px 15px" }}
-                >
-                    ← Anterior
-                </button>
-
+                ><BsArrowBarLeft /></button>
                 {/* Mostrar números de página */}
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                     <button
-                        key={page}
-                        onClick={() => goToPage(page)}
-                        style={{
-                            margin: "0 5px",
-                            padding: "8px 12px",
-                            backgroundColor: currentPage === page ? "#007bff" : "#f0f0f0",
-                            color: currentPage === page ? "white" : "black",
-                            border: "1px solid #ddd",
-                            cursor: "pointer",
-                            borderRadius: "4px"
-                        }}
+                    type="button"
+                    className="btn btn-primary"
+                    key={page}
+                    onClick={() => goToPage(page)}
+                    style={{
+                            backgroundColor: currentPage === page ? "#8f969eff" : "#0b5ed7",
+                            color: currentPage === page ? "white" : "black",}}
                     >
-                        {page}
+                    {page}
                     </button>
                 ))}
-
                 <button
+                    type="button"
+                    className="btn btn-primary"
                     onClick={goToNextPage}
                     disabled={currentPage === totalPages}
-                    style={{ marginLeft: "10px", padding: "8px 15px" }}
-                >
-                    Siguiente →
-                </button>
-
+                    style={{
+                            marginLeft: "10px", 
+                            padding: "8px 15px"
+                        }}
+                ><BsArrowBarRight /></button>
+                </div>
                 <p style={{ marginTop: "10px" }}>
-                    Página {currentPage} de {totalPages} | Resultados: {filteredPrestamos.length} | Total de préstamos: {prestamos.length}
+                Página {currentPage} de {totalPages} | Resultados: {filteredPrestamos.length} | Total de libros: {prestamos.length}
                 </p>
             </div>
         </div>

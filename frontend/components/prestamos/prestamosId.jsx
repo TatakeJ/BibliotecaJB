@@ -1,54 +1,34 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getLibroById, updateLibro, deleteLibro } from "../../api/librosApi";
-import { getAllCategorias, getAllGeneros, getAllAutores, getAllEditoriales } from "../../api/catalogoApi.js";
+import { getPrestamoById, devolverLibro } from "../../api/prestamosApi.js";
 
-function LibrosId() {
+function PrestamosId() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const [autores, setAutores] = useState([]);
-    const [categorias, setCategorias] = useState([]);
-    const [generos, setGeneros] = useState([]);
-    const [editoriales, setEditoriales] = useState([]);
-    const [libro, setLibro] = useState(null);
+    const [prestamo, setPrestamo] = useState(null);
     const [error, setError] = useState(null);
     const [formData, setFormData] = useState({});
     const [originalData, setOriginalData] = useState(null);
 
     useEffect(() => {
         if (id) {
-            getLibroById(id)
+            getPrestamoById(id)
                 .then(data => {
-                    // Formatear la fecha antes de establecerla en el estado
+                    // Formatear las fechas antes de establecerlas en el estado
                     const formattedData = {
                         ...data,
-                        "año_libro": data["año_libro"] ? data["año_libro"].split('T')[0] : '',
-                        fecha_ingreso: data.fecha_ingreso ? data.fecha_ingreso.split('T')[0] : ''
+                        fecha_prest: data.fecha_prest ? data.fecha_prest.split('T')[0] : '',
+                        fecha_devol: data.fecha_devol ? data.fecha_devol.split('T')[0] : '',
+                        fecha_entrega_final: data.fecha_entrega_final ? data.fecha_entrega_final.split('T')[0] : ''
                     };
-                    setLibro(data);
+                    setPrestamo(data);
                     setFormData(formattedData);
                     setOriginalData(formattedData);
                 })
                 .catch(error => {
                     setError(error.message);
-                    setLibro(null);
+                    setPrestamo(null);
                 });
-
-            getAllCategorias()
-                .then(setCategorias)
-                .catch(console.error);
-
-            getAllGeneros()
-                .then(setGeneros)
-                .catch(console.error);
-
-            getAllAutores()
-                .then(setAutores)
-                .catch(console.error);
-
-            getAllEditoriales()
-                .then(setEditoriales)
-                .catch(console.error);
         }
     }, [id]);
 
@@ -60,226 +40,120 @@ function LibrosId() {
         }));
     };
 
-    const handleUpdate = async (e) => {
+    const handleDevolver = async (e) => {
         e.preventDefault();
-        if (originalData) {
-            const fields = [
-                'nom_libro','id_categ','id_gen','cant_ejempla','dispo_libro',
-                'id_autor','año_libro','id_edito','edicion_libro','isbn','fecha_ingreso','idioma'
-            ];
 
-            const getVal = (obj, key) => {
-                if (!obj) return undefined;
-                if (obj[key] !== undefined) return obj[key];
-                const dash = key.replace(/_/g, '-');
-                return obj[dash] !== undefined ? obj[dash] : obj[key];
-            };
-
-            const changed = fields.some(k => {
-                const orig = (getVal(originalData, k) ?? "").toString();
-                const cur = (getVal(formData, k) ?? "").toString();
-                return orig !== cur;
-            });
-
-            if (!changed) {
-                alert("No hay cambios para actualizar.");
-                return;
-            }
+        if (prestamo.fecha_entrega_final) {
+            alert("Este préstamo ya fue devuelto.");
+            return;
         }
-        try {
-            await updateLibro(id, formData);
-            alert("Libro actualizado exitosamente");
-            navigate("/libros"); // Redirigir a la lista de libros
-        } catch (error) {
-            setError(error.message);
-        }
-    };
 
-    const handleDelete = async () => {
-        const ok = window.confirm("¿Seguro que desea eliminar este libro? Esta acción no se puede deshacer.");
+        const ok = window.confirm("¿Confirmar devolución del libro \"" + prestamo.nom_libro + "\" para " + prestamo.nom_usu + " " + prestamo.apell_usu + " ?");
         if (!ok) return;
 
+        const fechaHoy = new Date().toISOString().split("T")[0];
         try {
-            await deleteLibro(id);
-            alert("Libro eliminado correctamente.");
-            navigate("/libros");
+            await devolverLibro(id, fechaHoy);
+            alert("Devolución registrada.");
+            navigate("/prestamos");
         } catch (err) {
             console.error(err);
-            setError(err.message || "Error al eliminar el libro.");
+            setError(err.message || "Error al devolver el libro.");
         }
     };
 
     if (error) return <p>Error: {error}</p>;
-    if (!libro) return <p>Cargando...</p>;
+    if (!prestamo) return <p>Cargando...</p>;
 
     return (
         <>
-            <div className="detalle-libro">
-                <h2>Detalle del libro {id}</h2>
-                <p><b>Título:</b> {libro.nom_libro}</p>
-                <p><b>Autor:</b> {libro.nom_autor}</p>
-                <p><b>Categoría:</b> {libro.nom_categ}</p>
-                <p><b>Editorial:</b> {libro.nom_edito}</p>
-            </div>
-            
-            <div>
-                <button onClick={() => document.getElementById("form-actualizar").style.display = "block"}>
-                    Editar
-                </button>
-                <button onClick={handleDelete}>Eliminar</button>
-            </div>
-
-            <div id="form-actualizar" style={{display: "none"}}>
-                <h3>Actualizar Libro</h3>
-                <form onSubmit={handleUpdate}>
-                    <div>
-                        <label htmlFor="nom_libro">Título:</label>
-                        <input 
-                            type="text" 
-                            id="nom_libro" 
-                            name="nom_libro" 
-                            value={formData.nom_libro || ''} 
-                            onChange={handleChange}
-                        />
-                    </div>
-
-                    <div>
-                        <label htmlFor="categoria">Categoria:</label>
-                        <select name="id-categoria" id="select-categoria" value={formData.id_categ || ''} onChange={handleChange}>
-                            <option value="">Seleccione una categoria</option>
-                            {categorias.map((categ) => (
-                                <option key={categ.id_categ} value={categ.id_categ}>
-                                    {categ.nom_categ}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <div>
-                        <label htmlFor="genero">Genero:</label>
-                        <select name="id-genero" id="select-genero" value={formData.id_categ || ''} onChange={handleChange}>
-                            <option value="">Seleccione una genero</option>
-                            {generos.map((gen) => (
-                                <option key={gen.id_gen} value={gen.id_gen}>
-                                    {gen.nom_gen}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <div>
-                        <label htmlFor="cant_ejempla">Cantidad de ejemplares:</label>
-                        <input 
-                            type="number" 
-                            id="cant_ejempla" 
-                            name="cant_ejempla" 
-                            value={formData.cant_ejempla || ''} 
-                            onChange={handleChange}
-                        />
-                    </div>
-
-                    <div>
-                        <label htmlFor="dispo_libro">Disponibilidad:</label>
-                        <select 
-                            id="dispo_libro" 
-                            name="dispo_libro" 
-                            value={formData.dispo_libro || ''} 
-                            onChange={handleChange}
-                        >
-                            <option value="Disponible">Disponible</option>
-                            <option value="Prestado">Prestado</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label htmlFor="autor">Autor:</label>
-                        <select name="id-autor" id="select-autor" value={formData.id_autor || ''} onChange={handleChange}>
-                            <option value="">Seleccione un autor</option>
-                            {autores.map((autor) => (
-                                <option key={autor.id_autor} value={autor.id_autor}>
-                                    {autor.nom_autor}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <div>
-                        <label htmlFor="ano_libro">Año:</label>
-                        <input 
-                            type="date" 
-                            id="ano_libro" 
-                            name="año_libro" 
-                            value={formData["año_libro"] || ''} 
-                            onChange={handleChange}
-                            max="2100-12-31"
-                        />
-                    </div>
-
-                    <div>
-                        <label htmlFor="editorial">Editorial:</label>
-                        <select name="id-editorial" id="select-editorial" value={formData.id_edito || ''} onChange={handleChange}>
-                            <option value="">Seleccione una editorial</option>
-                            {editoriales.map((edito) => (
-                                <option key={edito.id_edito} value={edito.id_edito}>
-                                    {edito.nom_edito}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <div>
-                        <label htmlFor="edicion_libro">Edición:</label>
-                        <input 
-                            type="text" 
-                            id="edicion_libro" 
-                            name="edicion_libro" 
-                            value={formData.edicion_libro || ''} 
-                            onChange={handleChange}
-                        />
-                    </div>
-
-                    <div>
-                        <label htmlFor="isbn">ISBN:</label>
-                        <input 
-                            type="text" 
-                            id="isbn" 
-                            name="isbn" 
-                            value={formData.isbn || ''} 
-                            onChange={handleChange}
-                        />
-                    </div>
-
-                    <div>
-                        <label htmlFor="fecha_ingreso">Fecha de ingreso:</label>
-                        <input 
-                            type="date" 
-                            id="fecha_ingreso" 
-                            name="fecha_ingreso" 
-                            value={formData.fecha_ingreso || ''} 
-                            onChange={handleChange}
-                            max="2100-12-31"
-                        />
-                    </div>
-
-                    <div>
-                        <label htmlFor="idioma">Idioma:</label>
-                        <input 
-                            type="text" 
-                            id="idioma" 
-                            name="idioma" 
-                            value={formData.idioma || ''} 
-                            onChange={handleChange}
-                        />
-                    </div>
-
-                    <button type="submit">Guardar Cambios</button>
-                    <button type="button" onClick={() => document.getElementById("form-actualizar").style.display = "none"}>
-                        Cancelar
+            <div className="card w-50 mx-auto my-4 text-center">
+                <div className="card-header">
+                    <h2>Detalle del Préstamo {id}</h2>
+                </div>
+                <div className="card-body">
+                    <p><b>Usuario:</b> {prestamo.nom_usu} {prestamo.apell_usu}</p>
+                    <p><b>Email:</b> {prestamo.correo_usu}</p>
+                    <p><b>Libro:</b> {prestamo.nom_libro}</p>
+                    <p><b>Autor:</b> {prestamo.nom_autor}</p>
+                    <p><b>ISBN:</b> {prestamo.isbn}</p>
+                    <p><b>Fecha de Préstamo:</b> {prestamo.fecha_prest}</p>
+                    <p><b>Fecha Límite de Devolución:</b> {prestamo.fecha_devol}</p>
+                    <p><b>Fecha de Entrega Final:</b> {prestamo.fecha_entrega_final || "Pendiente"}</p>
+                    <p><b>Estado:</b> {prestamo.fecha_entrega_final ? "Devuelto" : "Activo"}</p>
+                </div>
+                <div className="card-footer">
+                    <button 
+                        onClick={() => document.getElementById("form-devolver").style.display = "block"}
+                        disabled={!!prestamo.fecha_entrega_final}
+                    >
+                        Registrar Devolución
                     </button>
-                </form>
+                    <button onClick={() => navigate("/prestamos")}>Volver</button>
+                </div>
+            </div>
+
+            <div id="form-devolver" style={{display: "none"}} className="card w-50 mx-auto my-4 text-center">
+                <div className="card-header">
+                    <h3>Registrar Devolución</h3>
+                </div>
+                <div className="card-body">
+                    <form onSubmit={handleDevolver}>
+                        <div>
+                            <label htmlFor="nom_libro">Libro:</label>
+                            <input 
+                                type="text" 
+                                id="nom_libro" 
+                                value={prestamo.nom_libro || ''} 
+                                disabled
+                            />
+                        </div>
+
+                        <div>
+                            <label htmlFor="nom_usu">Usuario:</label>
+                            <input 
+                                type="text" 
+                                id="nom_usu" 
+                                value={`${prestamo.nom_usu} ${prestamo.apell_usu}` || ''} 
+                                disabled
+                            />
+                        </div>
+
+                        <div>
+                            <label htmlFor="fecha_prest">Fecha de Préstamo:</label>
+                            <input 
+                                type="date" 
+                                id="fecha_prest" 
+                                value={formData.fecha_prest || ''} 
+                                disabled
+                            />
+                        </div>
+
+                        <div>
+                            <label htmlFor="fecha_devol">Fecha Límite de Devolución:</label>
+                            <input 
+                                type="date" 
+                                id="fecha_devol" 
+                                value={formData.fecha_devol || ''} 
+                                disabled
+                            />
+                        </div>
+
+                        <div>
+                            <p style={{ color: "red", marginTop: "15px" }}>
+                                <b>La devolución se registrará con la fecha de hoy</b>
+                            </p>
+                        </div>
+
+                        <button type="submit">Confirmar Devolución</button>
+                        <button type="button" onClick={() => document.getElementById("form-devolver").style.display = "none"}>
+                            Cancelar
+                        </button>
+                    </form>
+                </div>
             </div>
         </>
     );
 }
 
-export default LibrosId;
+export default PrestamosId;

@@ -1,7 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { BsArrowBarLeft, BsArrowBarRight } from "react-icons/bs";
+import { FaSearch } from "react-icons/fa";
 import { getAllCategorias } from "../../api/catalogoApi"; 
-import '../../src/styles/libros/libros.css';
+import ModuleNav from "../common/ModuleNav.jsx";
 
 function Categorias() {
     const [categorias, setCategorias] = React.useState([]);
@@ -56,39 +58,27 @@ function Categorias() {
 
     return (
         <div style={{ padding: "20px" }}>
-            <div className="container text-center">
+            <div style={{marginBottom: "20px"}} className="container text-center">
                 <div className="row">
-                    <div className="col">
-                        <Link to="/catalogo">
-                        <button style={{ margin: "10px", padding: "10px 20px" }}>Atras</button>
-                        </Link>
-                    </div>
+                    <ModuleNav />
                 </div>
             </div>
-            <h2>Lista de Categorías</h2>
-            <div className="container text-center">
-                <div className="row">
-                    <div className="col">
-                        <Link to="/categoriasCreate">
-                            <button style={{ margin: "10px", padding: "10px 20px" }}>Crear categoría</button>
-                        </Link>
-                    </div>
-                </div>
-            </div>
-
-            <div className="filter">
-                <input
-                    type="text"
-                    id="ipt-filter"
-                    placeholder="Buscar categoría"
-                    value={query}
+            <h2 style={{textAlign: "center", marginBottom: "20px"}}>Lista de Categorías</h2>
+            <div style={{display: "flex", justifyContent: "center", alignItems: "center", marginBottom: "20px",padding: "10px"}}>
+                <div className="input-group w-25">
+                    <span className="input-group-text" id="basic-addon1"><FaSearch /></span>
+                    <input type="text" id="ipt-filter" className="form-control" placeholder="Buscar categoría" aria-label="Buscar categoría" aria-describedby="basic-addon1" value={query}
                     onChange={(e) => {
                         setQuery(e.target.value);
-                        setCurrentPage(1);
-                    }}
-                />
+                        setCurrentPage(1); // volver a la primera página cuando cambia la búsqueda
+                    }}/>
+                </div>
+                <div className="container">
+                    <Link to="/categoriasCreate">
+                        <button type="button" class="btn btn-outline-primary">Crear categoría</button>
+                    </Link>
+                </div>
             </div>
-
             <table className="table-libros table table-striped-columns" border="1" cellPadding="10" style={{ width: "100%", borderCollapse: "collapse" }}>
                 <thead style={{ background: "#eee" }}>
                     <tr>
@@ -114,35 +104,42 @@ function Categorias() {
                 </tbody>
             </table>
 
-            <div style={{ marginTop: "20px", textAlign: "center" }}>
-                <button onClick={goToPreviousPage} disabled={currentPage === 1} style={{ marginRight: "10px", padding: "8px 15px" }}>
-                    ← Anterior
-                </button>
-
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            <div style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center"}}>
+                <div class="btn-group" role="group" aria-label="Basic example">
                     <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={goToPreviousPage}
+                    disabled={currentPage === 1}
+                    style={{ marginRight: "10px", padding: "8px 15px" }}
+                    ><BsArrowBarLeft /></button>
+                    {/* Mostrar números de página */}
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <button
+                        type="button"
+                        className="btn btn-primary"
                         key={page}
                         onClick={() => goToPage(page)}
                         style={{
-                            margin: "0 5px",
-                            padding: "8px 12px",
-                            backgroundColor: currentPage === page ? "#007bff" : "#f0f0f0",
-                            color: currentPage === page ? "white" : "black",
-                            border: "1px solid #ddd",
-                            cursor: "pointer",
-                            borderRadius: "4px"
-                        }}
+                            backgroundColor: currentPage === page ? "#8f969eff" : "#0b5ed7",
+                            color: currentPage === page ? "white" : "black",}}
                     >
                         {page}
                     </button>
-                ))}
-
-                <button onClick={goToNextPage} disabled={currentPage === totalPages} style={{ marginLeft: "10px", padding: "8px 15px" }}>
-                    Siguiente →
-                </button>
-
+                    ))}
+                    <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={goToNextPage}
+                    disabled={currentPage === totalPages}
+                    style={{
+                            marginLeft: "10px", 
+                            padding: "8px 15px"
+                        }}
+                    ><BsArrowBarRight /></button>
+                </div>
                 <p style={{ marginTop: "10px" }}>
-                    Página {currentPage} de {totalPages} | Resultados: {filteredCategorias.length} | Total: {categorias.length}
+                    Página {currentPage} de {totalPages} | Resultados: {filteredCategorias.length} | Total de categorías: {categorias.length}
                 </p>
             </div>
         </div>

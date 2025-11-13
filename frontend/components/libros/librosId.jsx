@@ -114,23 +114,28 @@ function LibrosId() {
 
     return (
         <>
-            <div className="detalle-libro">
+        <div class="card w-50 mx-auto my-4 text-center">
+            <div class="card-header">
                 <h2>Detalle del libro {id}</h2>
+            </div>
+            <div class="card-body">
                 <p><b>Título:</b> {libro.nom_libro}</p>
                 <p><b>Autor:</b> {libro.nom_autor}</p>
                 <p><b>Categoría:</b> {libro.nom_categ}</p>
                 <p><b>Editorial:</b> {libro.nom_edito}</p>
             </div>
-            
-            <div>
+            <div class="card-footer">
                 <button onClick={() => document.getElementById("form-actualizar").style.display = "block"}>
                     Editar
                 </button>
                 <button onClick={handleDelete}>Eliminar</button>
             </div>
-
-            <div id="form-actualizar" style={{display: "none"}}>
+        </div>
+        <div style={{display: "none"}} id="form-actualizar" class="card w-50 mx-auto my-4 text-center">
+            <div class="card-header">
                 <h3>Actualizar Libro</h3>
+            </div>
+            <div class="card-body">
                 <form onSubmit={handleUpdate}>
                     <div>
                         <label htmlFor="nom_libro">Título:</label>
@@ -278,6 +283,7 @@ function LibrosId() {
                     </button>
                 </form>
             </div>
+        </div>           
         </>
     );
 }

@@ -80,65 +80,49 @@ function PrestamosCreate() {
     <div style={{ padding: 20 }}>
       <h2>Crear Préstamo</h2>
 
+    <div className="container">
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Usuario:</label>
-          <select name="id_usu" value={form.id_usu} onChange={handleChange}>
-            <option value="">Seleccione usuario</option>
-            {usuarios.map((u) => (
-              <option key={u.id_usu} value={u.id_usu}>
-                {u.nom_usu} {u.apell_usu} ({u.correo_usu})
-              </option>
-            ))}
-          </select>
+
+        <div className="input-group input-group-sm mb-3">
+            <span className="input-group-text" id="inputGroup-sizing-sm">Usuario:</span>
+            <select className="form-select" aria-label="Default select example" name="id_usu" id="select-usuario" value={form.id_usu} onChange={handleChange} required>
+                <option value="">Seleccione un usuario</option>
+                {usuarios.map((u) => (
+                    <option key={u.id_usu} value={u.id_usu}>
+                      {u.nom_usu} {u.apell_usu} ({u.correo_usu})
+                    </option>
+                ))}
+            </select>
         </div>
 
-        <div>
-          <label>Libro:</label>
-          <select name="id_libro" value={form.id_libro} onChange={handleChange}>
-            <option value="">Seleccione libro</option>
-            {libros.map((l) => (
-              <option key={l.id_libro} value={l.id_libro}>
-                {l.nom_libro} — {l.nom_autor} ({l.dispo_libro} / {l.cant_ejempla})
-              </option>
-            ))}
-          </select>
+        <div className="input-group input-group-sm mb-3">
+            <span className="input-group-text" id="inputGroup-sizing-sm">Libro:</span>
+            <select className="form-select" aria-label="Default select example" name="id_libro" id="select-libro" value={form.id_libro} onChange={handleChange} required>
+                <option value="">Seleccione un libro</option>
+                {libros.map((l) => (
+                    <option key={l.id_libro} value={l.id_libro}>
+                      {l.nom_libro} — {l.nom_autor} ({l.dispo_libro} / {l.cant_ejempla})
+                    </option>
+                ))}
+            </select>
+        </div>
+        <div className="input-group input-group-sm mb-3">
+            <span className="input-group-text" id="inputGroup-sizing-sm">Fecha de préstamo:</span>
+            <input type="date" className="form-control" id="fecha_prest" name="fecha_prest" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value={form.fecha_prest} onChange={handleChange} max="2100-12-31" required/>
         </div>
 
-        <div>
-          <label>Fecha de préstamo:</label>
-          <input
-            type="date"
-            name="fecha_prest"
-            value={form.fecha_prest}
-            onChange={handleChange}
-            max="2100-12-31"
-          />
-        </div>
-
-        <div>
-          <label>Fecha de devolución (opcional):</label>
-          <input
-            type="date"
-            name="fecha_devol"
-            value={form.fecha_devol}
-            onChange={handleChange}
-            min={form.fecha_prest}
-            max="2100-12-31"
-          />
+        <div className="input-group input-group-sm mb-3">
+            <span className="input-group-text" id="inputGroup-sizing-sm">Fecha de devolución (opcional):</span>
+            <input type="date" className="form-control" id="fecha_prest" name="fecha_prest" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value={form.fecha_prest} onChange={handleChange} max="2100-12-31" required/>
         </div>
 
         {error && <p style={{ color: "red" }}>{error}</p>}
 
         <div style={{ marginTop: 10 }}>
-          <button type="submit">Crear Préstamo</button>
-          <Link to="/prestamos">
-            <button type="button" style={{ marginLeft: 8 }}>
-              Cancelar
-            </button>
-          </Link>
+          <button type="submit" class="btn btn-success">Guardar Préstamo</button>
         </div>
       </form>
+    </div>
     </div>
   );
 }

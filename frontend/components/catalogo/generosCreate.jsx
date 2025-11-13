@@ -1,6 +1,5 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "../../src/styles/libros/librosCreate.css";
 import { createGenero } from "../../api/catalogoApi.js"; 
 
 
@@ -37,14 +36,14 @@ function GenerosCreate() {
     return (
         <div className="cont-create">
             <h1>Crear Nuevo Género</h1>
-            <div className="cont-form">
+            <div className="container">
                 <form onSubmit={handleSubmit}>
                     <div className="input-group input-group-sm mb-3">
                         <span className="input-group-text" id="inputGroup-sizing-sm">Nombre:</span>
                         <input type="text" className="form-control" id="nom_gen" name="nom_gen" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value={form.nom_gen} onChange={handleChange} required/>
                     </div>
 
-                    <button type="submit">Guardar Género</button>
+                    <button type="submit" class="btn btn-success">Guardar Género</button>
                 </form>
             </div>
         </div>
